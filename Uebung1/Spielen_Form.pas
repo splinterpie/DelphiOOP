@@ -44,9 +44,10 @@ var
 {$R *.DFM}
 
 
+// Fuellt die Listview mit den Objektwerten
 procedure TFmSpielen.ListFuellen(mensch: TMensch);
 var
-   item : TListItem;
+  item : TListItem;
 begin
   Item := lstTaetigkeit.Items.Add;
   if mensch is TStudent then
@@ -67,7 +68,7 @@ begin
   end;
 end;
 
-// Constructoraufruf und Labels fuellen
+// Combobox fuellen
 procedure TFmSpielen.FormCreate(Sender: TObject);
 begin
   cbTaetigkeit.Items.Append('studierend');
@@ -121,6 +122,7 @@ begin
   end;
 end;
 
+// Konstruktoraufruf und fuellen der Listview über 'ListFuellen'
 procedure TFmSpielen.btnCreateClick(Sender: TObject);
 var
  idx: integer;
