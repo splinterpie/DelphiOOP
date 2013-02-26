@@ -4,20 +4,10 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Controls, Forms, Dialogs,
-  StdCtrls, ExtCtrls, Mask, ComCtrls, Menus, Grids;
+  StdCtrls, ExtCtrls, Mask, ComCtrls, Menus, Grids, Spielen_Klassen;
 
 type
   TFmSpielen = class(TForm)
-    lblMenschAName: TLabel;
-    lblMenschBName: TLabel;
-    lblMenschAAlter: TLabel;
-    lblMenschBAlter: TLabel;
-    lblBName: TLabel;
-    lblStudentInName: TLabel;
-    lblBAlter: TLabel;
-    lblStudentInAlter: TLabel;
-    lblBEinkommen: TLabel;
-    lblStudentInEinkommen: TLabel;
     eName: TEdit;
     eAlter: TEdit;
     eBafoeg: TEdit;
@@ -26,13 +16,13 @@ type
     eBeruf: TEdit;
     eGehalt: TEdit;
     btnCreate: TButton;
-    memTaetigkeit: TMemo;
-    procedure MemoFuellen;
+    lstTaetigkeit: TListView;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure cbTaetigkeitChange(Sender: TObject);
     procedure btnCreateClick(Sender: TObject);
   private
+    procedure ListFuellen(mensch: TMensch);
     { Private-Deklarationen }
   public
     { Public-Deklarationen }
@@ -42,9 +32,6 @@ var
   FmSpielen: TFmSpielen;
 
 implementation
-
-uses
-  Spielen_Klassen;
 
 var
   Maxi, Klaus: TStudent;
@@ -57,48 +44,53 @@ var
 {$R *.DFM}
 
 
-procedure TFmSpielen.MemoFuellen;;
+procedure TFmSpielen.ListFuellen(mensch: TMensch);
+var
+   item : TListItem;
 begin
-  // Name
-  lblMenschAName.Caption   := Klaus.Name;
-  lblMenschBName.Caption   := Mareike.Name;
-  lblBName.Caption         := Gerhard.Name;
-  lblStudentInName.Caption := Maxi.Name;
-
-  // Alter
-  lblMenschAAlter.Caption   := IntToStr(Klaus.Alter);
-  lblMenschBAlter.Caption   := IntToStr(Mareike.Alter);
-  lblBAlter.Caption         := IntToStr(Gerhard.Alter);
-  lblStudentInAlter.Caption := IntToStr(Maxi.Alter);
-
-  // Einkommen
-  lblBEinkommen.Caption := FloatToStr(Gerhard.Einkommen);
-  lblStudentInEinkommen.Caption := FloatToStr(Maxi.Einkommen);
-
-  memTaetigkeit.Lines.AddObject
-
+  Item := lstTaetigkeit.Items.Add;
+  if mensch is TStudent then
+  begin
+    item.Caption := mensch.Name;;
+    item.SubItems.Add(IntToStr(mensch.Alter));
+    item.SubItems.Add('studierend');
+    item.SubItems.Add((mensch as TStudent).Fach);
+    item.SubItems.Add(FloatToStr((mensch as TStudent).Einkommen));
+  end
+  else if mensch is TBerufstaetig then
+  begin
+    item.Caption := mensch.Name;;
+    item.SubItems.Add(IntToStr(mensch.Alter));
+    item.SubItems.Add('berufstaetig');
+    item.SubItems.Add((mensch as TBerufstaetig).Branche);
+    item.SubItems.Add(FloatToStr((mensch as TBerufstaetig).Einkommen));
+  end;
 end;
 
 // Constructoraufruf und Labels fuellen
 procedure TFmSpielen.FormCreate(Sender: TObject);
 begin
-  Klaus := TStudent.Create('Klaus Mueller', 31, 'Phlosophie', 350);
-  Maxi := TStudent.Create('Maxi Mustermensch', 999, 'BWL', 400);
-  Gerhard := TBerufstaetig.Create('Gerhard Schroeder', 64, 'Lobbyist', 10000);
-  Mareike := TBerufstaetig.Create('Mareike Meier', 55, 'CEO', 500000);
-  LabelsFuellen;
-
   cbTaetigkeit.Items.Append('studierend');
   cbTaetigkeit.Items.Append('berufstätig');
 end;
 
 // Destruktoraufruf
 procedure TFmSpielen.FormClose(Sender: TObject; var Action: TCloseAction);
+var
+  idx: Integer;
 begin
-  Klaus.Free;
-  Mareike.Free;
-  Maxi.Free;
-  Gerhard.Free;
+  if length(studenten) > 0 then
+  begin
+    setlength(studenten, length(studenten));
+    for idx:=0 to length(studenten)-1 do
+      studenten[idx].Free;
+  end;
+  if  length(berufstaetige) > 0 then
+  begin
+    setlength(berufstaetige, length(berufstaetige));
+    for idx:=0 to length(berufstaetige)-1 do
+      berufstaetige[idx].Free;
+  end;
 end;
 
 procedure TFmSpielen.cbTaetigkeitChange(Sender: TObject);
@@ -138,12 +130,14 @@ begin
     setlength(studenten, length(studenten)+1);
     idx := length(studenten)-1;
     studenten[idx] := TStudent.Create(eName.Text, StrToInt(eAlter.Text), eFach.Text, StrToFloat(eBafoeg.Text));
+    ListFuellen(studenten[idx]);
   end
   else if cbTaetigkeit.ItemIndex = 1 then
   begin
     setlength(berufstaetige, length(berufstaetige)+1);
     idx := length(berufstaetige)-1;
     berufstaetige[idx] := TBerufstaetig.Create(eName.Text, StrToInt(eAlter.Text), eBeruf.Text, StrToFloat(eGehalt.Text));
+    ListFuellen(berufstaetige[idx]);
   end;
 end;
 
