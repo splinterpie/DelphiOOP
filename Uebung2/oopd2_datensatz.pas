@@ -3,7 +3,7 @@ unit oopd2_datensatz;
 interface
 
 uses
-  Classes, SysUtils, Comobj, Dialogs, ActiveX;
+  Classes, SysUtils, Comobj, ActiveX;
 
 type
   TDatensatz = class(TObject)

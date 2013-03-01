@@ -4,8 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  OOPD2_Datensatz, OOPD2_Adresse, OOPD2_Kunde, ComCtrls, StdCtrls, ComObj,
-  Mask;
+  OOPD2_Datensatz, OOPD2_Adresse, OOPD2_Kunde, StdCtrls, ComCtrls;
 
 type
   TFmOOPD2 = class(TForm)
@@ -76,9 +75,9 @@ begin
   item.Caption := datensatz.getDSN;
   if datensatz is TKunde then
   begin
-    item.SubItems.Add(IntToStr((datensatz as TKunde).getKundenNummer));
+    item.SubItems.Add((datensatz as TKunde).formatKundenNummer(((datensatz as TKunde).getKundenNummer)));
     item.SubItems.Add((datensatz as TKunde).getName);
-    item.SubItems.Add((datensatz as TKunde).getAnrede);                   // Anrede
+    item.SubItems.Add((datensatz as TKunde).getAnrede);                
     item.SubItems.Add((datensatz as TKunde).getAlter);
     item.SubItems.Add((datensatz as TKunde).getKundeZuAnschrift(adresse));
   end;

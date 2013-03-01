@@ -3,13 +3,13 @@ unit OOPD2_Kunde;
 interface
 
 uses
-  Classes, SysUtils, Controls, oopd2_datensatz, oopd2_adresse, Dialogs;
+  Classes, SysUtils, Controls, oopd2_datensatz, oopd2_adresse;
 
 type
   TAnrede = (Frau, Herr, Dr, Prof, Dipl);
   TKunde = class(TDatensatz)
   private
-    iNummer: Integer; //Format: 0001, 0002, 0003 usw.
+    iNummer: Integer;
     sName: String;
     enumAnrede: TAnrede;
     dGeburtsdatum: TDateTime;
@@ -17,6 +17,7 @@ type
     constructor Create(nummer: Integer; name: String; anrede: TAnrede; geburtstag: TDate);
     destructor Free;
     function getKundenNummer: Integer;
+    function formatKundenNummer(kundennummer:Integer): String;
     function getName: String;
     function getAnrede: String;
     function setAnrede(anrede: TAnrede; anredeIndex: Integer): TAnrede;
@@ -45,6 +46,23 @@ end;
 function TKunde.getKundenNummer: Integer;
 begin
   Result := iNummer;
+end;
+
+function TKunde.formatKundenNummer(kundennummer:Integer): String;
+var
+  sKundenNummer: String;
+begin
+  sKundenNummer := IntToStr(kundennummer);
+  if length(sKundenNummer) < 2 then
+    sKundenNummer := '000' + sKundenNummer
+
+  else if length(sKundenNummer) < 3 then
+    sKundenNummer := '00' + sKundenNummer
+
+  else if length(sKundenNummer) < 4 then
+    sKundenNummer := '0' + sKundenNummer;
+
+  Result := sKundenNummer
 end;
 
 function TKunde.getName: String;
