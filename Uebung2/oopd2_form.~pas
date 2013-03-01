@@ -114,7 +114,7 @@ begin
     ListFuellen(kunden[i], adressen[i]);
   end
   else
-    MessageDlg('Bitte geben Sie Werte in alle Eingabefelder ein.', mtError, [mbOk], 0);
+    ShowMessage('Bitte geben Sie Werte in alle Eingabefelder ein.');
 end;
 
 // Die Combobox manuell auf Read-Only setzen

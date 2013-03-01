@@ -6,7 +6,6 @@ uses
   SysUtils;
 
 type
-  // Basisklasse
   TMensch = class(TObject)
   private
     sName: String;

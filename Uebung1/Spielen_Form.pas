@@ -34,20 +34,15 @@ var
 implementation
 
 var
-  Maxi, Klaus: TStudent;
-  Gerhard, Mareike: TBerufstaetig;
-
   studenten: array of TStudent;
   berufstaetige: array of TBerufstaetig;
-
 
 {$R *.DFM}
 
 
-// Fuellt die Listview mit den Objektwerten
 procedure TFmSpielen.ListFuellen(mensch: TMensch);
 var
-  item : TListItem;
+   item : TListItem;
 begin
   Item := lstTaetigkeit.Items.Add;
   if mensch is TStudent then
@@ -68,7 +63,7 @@ begin
   end;
 end;
 
-// Combobox fuellen
+// Constructoraufruf und Labels fuellen
 procedure TFmSpielen.FormCreate(Sender: TObject);
 begin
   cbTaetigkeit.Items.Append('studierend');
@@ -122,7 +117,6 @@ begin
   end;
 end;
 
-// Konstruktoraufruf und fuellen der Listview über 'ListFuellen'
 procedure TFmSpielen.btnCreateClick(Sender: TObject);
 var
  idx: integer;
